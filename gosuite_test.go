@@ -24,19 +24,19 @@ type Suite struct {
 	tearDownUpCalledTimes    int
 }
 
-func (s *Suite) SetUpSuite() {
+func (s *Suite) SetUpSuite(t *testing.T) {
 	s.setUpSuiteCalledTimes++
 }
 
-func (s *Suite) TearDownSuite() {
+func (s *Suite) TearDownSuite(t *testing.T) {
 	s.tearDownSuiteCalledTimes++
 }
 
-func (s *Suite) SetUp() {
+func (s *Suite) SetUp(t *testing.T) {
 	s.setUpCalledTimes++
 }
 
-func (s *Suite) TearDown() {
+func (s *Suite) TearDown(t *testing.T) {
 	s.tearDownUpCalledTimes++
 }
 

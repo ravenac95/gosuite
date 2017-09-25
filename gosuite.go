@@ -20,16 +20,16 @@ const suiteTestMethodPrefix = "Test"
 // TestSuite is an interface where you define suite and test case preparation and tear down logic.
 type TestSuite interface {
 	// SetUpSuite is called once before the very first test in suite runs
-	SetUpSuite()
+	SetUpSuite(t *testing.T)
 
 	// TearDownSuite is called once after thevery last test in suite runs
-	TearDownSuite()
+	TearDownSuite(t *testing.T)
 
 	// SetUp is called before each test method
-	SetUp()
+	SetUp(t *testing.T)
 
 	// TearDown is called after each test method
-	TearDown()
+	TearDown(t *testing.T)
 }
 
 /*
@@ -42,16 +42,16 @@ Run sets up the suite, runs its test cases and tears it down:
     3. Calls `suite.TearDownSuite`
 */
 func Run(t *testing.T, suite TestSuite) {
-	suite.SetUpSuite()
-	defer suite.TearDownSuite()
+	suite.SetUpSuite(t)
+	defer suite.TearDownSuite(t)
 
 	suiteType := reflect.TypeOf(suite)
 	for i := 0; i < suiteType.NumMethod(); i++ {
 		m := suiteType.Method(i)
 		if strings.HasPrefix(m.Name, suiteTestMethodPrefix) {
 			t.Run(m.Name, func(t *testing.T) {
-				suite.SetUp()
-				defer suite.TearDown()
+				suite.SetUp(t)
+				defer suite.TearDown(t)
 
 				in := []reflect.Value{reflect.ValueOf(suite), reflect.ValueOf(t)}
 				m.Func.Call(in)
